@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  NotificationView.swift
 //  TwitterCloneSwiftUI
 //
 //  Created by window1 on 2023/10/26.
@@ -7,20 +7,20 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct NotificationView: View {
     var body: some View {
         VStack {
-            Image(systemName: "globe")
+            Image(systemName: "bell")
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            Text("NotificationView")
         }
         .padding()
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct NotificationView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NotificationView()
     }
 }
