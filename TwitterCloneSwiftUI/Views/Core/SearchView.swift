@@ -6,44 +6,91 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchView: View {
-    @State private var isPlaying: Bool = false
-    @State private var currentTime: TimeInterval = 3751.0
-    let episode: Episode
+    @Query var searchHistories: [SearchHistory]
+    @Environment(\.modelContext) var modelContext
+    
+    @State private var searchText: String = ""
+    @State private var showingSetting: Bool = false
+    
+    @ObservedObject private var userViewModel = UserViewModel()
+    let sample = SampleData()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "magnifyingglass")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text(episode.title).font(.title)
-            
-            Button(action: {
-                print("Touch autor")
-            }, label: {
-                Text(episode.author).font(.caption).foregroundColor( isPlaying ? .black : .gray)
-            })
-            ControlButton(isplaying: $isPlaying)
-            
-            Text(convertSecondToTime(timeInSeconds:currentTime))
+        NavigationStack {
+            List {
+                Text("최근검색어")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.blue)
+                    .listRowBackground(Color.clear)
+                ForEach(searchHistories, id: \.startDate) { history in
+                    VStack(alignment:.leading){
+                        Text(history.word)
+                            .font(.system(size: 15, weight: .medium))
+                        Text(customDateFormat(history.startDate))
+                            .font(.system(size: 13, weight: .thin))
+                    }
+                    .listRowBackground(Color.clear)
+                }
+                .onDelete(perform: deleteSearchHistory)
+            }
+            .padding(.top, -10)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading){
+                    makeProfileToolbarItem()
+                }
+                ToolbarItem(placement: .topBarTrailing){
+                    makeSearchSettingToolbarItem(setting: $showingSetting)
+                }
+            }
         }
-        .padding()
+        .background(Color.clear)
+        .searchable(text: $searchText, placement: .automatic, prompt: "검색어를 입력하세요")
+        .onAppear {
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+                updateSearchHistory(searchText)
+            }
+        }
+        var searchResults: [SampleHistroy] {
+            if searchText.isEmpty {
+                return sample.contents
+            } else {
+                return sample.contents.filter{ $0.word == searchText}
+            }
+        }
     }
     
-    func convertSecondToTime(timeInSeconds: Double) -> String {
-        let hour = (Int)(fmod((timeInSeconds/3600), 12))
-        let minutes = (Int)(fmod((timeInSeconds/60), 60))
-        let seconds = (Int)(fmod(timeInSeconds, 60))
-        return String(format: "%02d:%02d:%02d", hour, minutes, seconds)
+    func customDateFormat(_ currentDate: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let formattedDate = dateFormatter.string(from: currentDate)
+        return formattedDate
     }
+    
+    func updateSearchHistory(_ searchText: String) {
+        var word: [String] = []
+        for strings in searchHistories {
+            word.append(strings.word)
+        }
+        guard searchText.count > 0,
+              !word.contains(searchText) else { return }
+        let value = SearchHistory(word: searchText)
+        modelContext.insert(value)
+    }
+    
+    func deleteSearchHistory(_ indexSet: IndexSet) {
+        for index in indexSet {
+            let destination = searchHistories[index]
+            modelContext.delete(destination)
+        }
+    }
+    
+}
+
+#Preview {
+    SearchView()
 }
 
 
-
-
-
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchView(episode: Episode())
-    }
-}

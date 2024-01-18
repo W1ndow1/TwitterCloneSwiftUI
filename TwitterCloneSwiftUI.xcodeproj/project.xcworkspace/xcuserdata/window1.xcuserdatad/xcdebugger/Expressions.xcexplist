@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "closure #1 in UserViewModel.fetchUser():UserViewModel.swift">
+      </ContextState>
+      <ContextState
+         contextName = "SearchView.updateSearchHistory(_:):SearchView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #2 in closure #1 in SearchView.body.getter:SearchView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "searchText">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TweetButton.body.getter:TweetButton.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "buttonOpacity">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "UserViewModel.fetchUser():UserViewModel.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "users">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in SearchView.updateSearchHistory(_:):SearchView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "find.word.contains(searchText) &amp;&amp; searchText.count &gt; 0">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in closure #1 in NotificationView.body.getter:NotificationView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "subject">
+            </PersistentString>
+            <PersistentString
+               value = "viewModel">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

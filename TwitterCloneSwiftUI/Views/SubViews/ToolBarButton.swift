@@ -1,5 +1,5 @@
 //
-//  ToolBarView.swift
+//  ToolBarButton.swift
 //  TwitterCloneSwiftUI
 //
 //  Created by window1 on 12/6/23.
@@ -15,7 +15,7 @@ func makeProfileToolbarItem() -> some View {
     })
 }
 
-func makeSettingToolbarItem(setting: Binding<Bool>) -> some View {
+func makeSearchSettingToolbarItem(setting: Binding<Bool>) -> some View {
     return Button {
         setting.wrappedValue.toggle()
     } label: {
@@ -26,5 +26,17 @@ func makeSettingToolbarItem(setting: Binding<Bool>) -> some View {
     .sheet(isPresented: setting){
         SettingView()
             .presentationDetents([.height(300)])
+    }
+}
+
+func makeHomeSettingToolbarItem(setting: Binding<Bool>) -> some View {
+    return Button {
+        setting.wrappedValue.toggle()
+    } label: {
+        Image(systemName: "gearshape")
+            .foregroundStyle(.gray)
+    }
+    .fullScreenCover(isPresented: setting){
+        SettingView()
     }
 }

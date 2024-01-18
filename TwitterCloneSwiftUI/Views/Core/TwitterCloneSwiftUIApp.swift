@@ -6,22 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct TwitterCloneSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            TabView {
-                HomeView()
-                    .tabItem({ Label("", systemImage: "house") })
-                SearchView(episode: Episode())
-                    .tabItem({ Label("", systemImage: "magnifyingglass") })
-                NotificationView()
-                    .tabItem({ Label("", systemImage: "bell") })
-                DirectMessagesView()
-                    .tabItem({ Label("", systemImage: "envelope")})
-            }
-            .tint(Color.twitterButton)
+            MainTabView()
         }
+        .modelContainer(for: SearchHistory.self)
     }
 }

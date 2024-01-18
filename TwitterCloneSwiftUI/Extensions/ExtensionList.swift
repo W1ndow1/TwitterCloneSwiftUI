@@ -22,3 +22,12 @@ extension Timer {
         return String(format: "%02d:%02d:%02d", hour, minutes, seconds)
     }
 }
+
+///뷰의 투명도 변경
+func changeOpacity(_ dirction: Direction, _ offset: CGFloat) -> Double {
+    return dirction == .up
+    //아래 내용으로 갈땐 투명으로
+    ? (offset >= 151.0 ? 1.0 : 0.5)
+    //위 내용으로 갈땐 원래대로
+    : 1.0
+}

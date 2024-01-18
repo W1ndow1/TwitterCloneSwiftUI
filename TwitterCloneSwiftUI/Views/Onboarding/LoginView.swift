@@ -9,7 +9,28 @@ import SwiftUI
 
 struct LoginView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Top View")
+                .padding()
+            
+            GeometryReader { geometry in
+                HStack {
+                    Text("Left View")
+                        .frame(width: geometry.size.width * 0.4)
+                        .padding()
+                    
+                    Spacer()
+                    
+                    Text("Right View")
+                        .frame(width: geometry.size.width * 0.4)
+                        .padding()
+                }
+            }
+            
+            Text("Bottom View")
+                .padding()
+        }
+        .padding()
     }
 }
 

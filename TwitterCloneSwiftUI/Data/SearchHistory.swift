@@ -14,13 +14,9 @@ class SearchHistory {
     var word: String
     var startDate: Date
     
-    init(searchWord: String, startDate: Date = .now) {
-        self.word = searchWord
+    init(word: String = "", startDate: Date = .now) {
+        self.word = word
         self.startDate = startDate
-    }
-    
-    func SaveData<T>(a: inout T, b: inout T) -> Int {
-        return 0;
     }
 }
 

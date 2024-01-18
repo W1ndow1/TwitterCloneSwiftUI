@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TweetRowView: View {
+    @Environment(\.colorScheme) var colorScheme
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top, spacing: 10) {
@@ -24,10 +25,15 @@ struct TweetRowView: View {
                         Text("2주")
                             .foregroundColor(.gray)
                             .font(.caption )
+                            .padding()
                     }
-                    Text("SwiftUI로 만들어 보는 트위터앱입니다. 본문 내용이 많아지면 어떻게 되는지 알아보고 싶습니다. 뭔가 예전 같았으면 계행 문자 같은거 써야 할거 같은데 그런게 아니라면 뭔가 다른 방법이 있겠죠. 우선 이렇게 데이터 넣는걸 해보자")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.leading)
+                    Text("""
+                        SwiftUI로 만들어 보는 트위터앱입니다. 본문 내용이 많아지면 어떻게 되는지 알아보고 싶습니다.
+                        뭔가 예전 같았으면 계행 문자 같은거 써야 할거 같은데 그런게 아니라면 뭔가 다른 방법이 있겠죠.
+                        우선 이렇게 데이터 넣는걸 해보자
+                        """)
+                    .font(.subheadline)
+                    .multilineTextAlignment(.leading)
                     
                 }
             }
@@ -36,7 +42,11 @@ struct TweetRowView: View {
                 Button {
                     print("Replay Button")
                 } label: {
-                    Image("replayIcon")
+                    if colorScheme == .dark{
+                        Image("replayIcon").colorInvert()
+                    } else{
+                        Image("replayIcon")
+                    }
                 }
                 
                 Spacer()
@@ -44,7 +54,11 @@ struct TweetRowView: View {
                 Button {
                     print("Retweet Button")
                 } label: {
-                    Image("retweetIcon")
+                    if colorScheme == .dark{
+                        Image("retweetIcon").colorInvert()
+                    } else{
+                        Image("retweetIcon")
+                    }
                 }
                 
                 Spacer()
@@ -52,7 +66,11 @@ struct TweetRowView: View {
                 Button {
                     print("Heart Button")
                 } label: {
-                    Image("heartIcon")
+                    if colorScheme == .dark{
+                        Image("heartIcon").colorInvert()
+                    } else{
+                        Image("heartIcon")
+                    }
                 }
                 
                 Spacer()
@@ -60,7 +78,11 @@ struct TweetRowView: View {
                 Button {
                     print("Share Button")
                 } label: {
-                    Image("shareIcon")
+                    if colorScheme == .dark{
+                        Image("shareIcon").colorInvert()
+                    } else{
+                        Image("shareIcon")
+                    }
                 }
                 
                 Spacer()
@@ -68,11 +90,28 @@ struct TweetRowView: View {
                 Button {
                     print("Views Button")
                 } label: {
-                    Image("viewsIcon")
+                    if colorScheme == .dark{
+                        Image("viewsIcon").colorInvert()
+                    } else{
+                        Image("viewsIcon")
+                    }
                 }
             }
             .padding()
         }
+    }
+    
+    func invertIcon(_ name: String) -> some View {
+        return Button {
+            print("\(name) Button")
+        }label: {
+            if colorScheme == .dark {
+                Image(name).colorInvert()
+            } else {
+                Image(name)
+            }
+        }
+        
     }
 }
 

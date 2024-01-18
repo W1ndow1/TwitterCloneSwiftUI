@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+struct Tweet: Codable, Identifiable {
+    var id = UUID().uuidString
+    let author: String
+    let authorID: String
+    let tweetContent: String
+    var likesCount: Int
+    var likers: [String]
+    let isReplay: Bool
+    let parentReference: String?
+}
