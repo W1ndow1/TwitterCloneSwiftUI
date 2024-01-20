@@ -9,33 +9,33 @@ import SwiftUI
 import SwiftData
 
 struct SearchView: View {
-    @Query var searchHistories: [SearchHistory]
     @Environment(\.modelContext) var modelContext
-    
+    @Query(sort: \SearchHistory.startDate, order: .reverse) var searchHistories: [SearchHistory]
+    @State private var path = [SearchHistory]()
     @State private var searchText: String = ""
     @State private var showingSetting: Bool = false
-    
-    @ObservedObject private var userViewModel = UserViewModel()
-    let sample = SampleData()
-    
+    @State private var sortOrder = SortDescriptor(\SearchHistory.startDate, order: .reverse)
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
                 Text("최근검색어")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundStyle(.blue)
                     .listRowBackground(Color.clear)
-                ForEach(searchHistories, id: \.startDate) { history in
-                    VStack(alignment:.leading){
-                        Text(history.word)
-                            .font(.system(size: 15, weight: .medium))
-                        Text(customDateFormat(history.startDate))
-                            .font(.system(size: 13, weight: .thin))
+                ForEach(filter, id: \.startDate) { history in
+                    NavigationLink(value: history) {
+                        VStack(alignment:.leading){
+                            Text(history.word)
+                                .font(.system(size: 15, weight: .medium))
+                            Text(customDateFormat(history.startDate))
+                                .font(.system(size: 13, weight: .thin))
+                        }
                     }
                     .listRowBackground(Color.clear)
                 }
                 .onDelete(perform: deleteSearchHistory)
             }
+            .navigationDestination(for: SearchHistory.self, destination: EditSearchView.init)
             .padding(.top, -10)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading){
@@ -43,6 +43,20 @@ struct SearchView: View {
                 }
                 ToolbarItem(placement: .topBarTrailing){
                     makeSearchSettingToolbarItem(setting: $showingSetting)
+                }
+                ToolbarItem(placement: .topBarLeading){
+                    Button("추가하기", systemImage: "plus", action: addSearchHistory)
+                }
+                ToolbarItem(placement:. topBarTrailing) {
+                    Menu("정렬" , systemImage: "arrow.up.arrow.down") {
+                        Picker("정렬", selection:$sortOrder) {
+                            Text("이름")
+                                .tag(SortDescriptor(\SearchHistory.word, order: .forward))
+                            Text("날짜")
+                                .tag(SortDescriptor(\SearchHistory.startDate, order:.reverse))
+                        }
+                        .pickerStyle(.inline)
+                    }
                 }
             }
         }
@@ -53,14 +67,15 @@ struct SearchView: View {
                 updateSearchHistory(searchText)
             }
         }
-        var searchResults: [SampleHistroy] {
+        var filter: [SearchHistory] {
             if searchText.isEmpty {
-                return sample.contents
+                return searchHistories
             } else {
-                return sample.contents.filter{ $0.word == searchText}
+                return searchHistories.filter { $0.word.localizedStandardContains(searchText)}
             }
         }
     }
+    
     
     func customDateFormat(_ currentDate: Date) -> String {
         let dateFormatter = DateFormatter()
@@ -87,10 +102,24 @@ struct SearchView: View {
         }
     }
     
+    func addSearchHistory() {
+        let searchHistory = SearchHistory()
+        modelContext.insert(searchHistory)
+        path = [searchHistory]
+    }
+    
 }
 
 #Preview {
-    SearchView()
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: SearchHistory.self, configurations: config)
+        let example = SearchHistory(word: "AsianCup2023", startDate: .now)
+        return SearchView()
+            .modelContainer(container)
+    } catch {
+        fatalError("Failed to create model container")
+    }
 }
 
 

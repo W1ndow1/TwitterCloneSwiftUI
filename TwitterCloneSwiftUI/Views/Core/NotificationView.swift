@@ -31,6 +31,15 @@ struct NotificationView: View {
             .navigationTitle("@escape로 가져와보기")
         }
     }
+    
+    func customDateFormat(_ currentDate: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let formattedDate = dateFormatter.string(from: currentDate)
+        return formattedDate
+    }
+    
+    
 }
 
 #Preview {
